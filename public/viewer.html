@@ -1,0 +1,77 @@
+<!-- public/viewer.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stream Viewer | Ultra-Low Latency</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100%;
+      height: 100vh;
+      object-fit: contain;
+    }
+
+    /* Controls Overlay */
+    .controls-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      padding: 2rem 1rem 1rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    body:hover .controls-overlay {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="text-white font-sans flex flex-col items-center justify-center relative">
+
+  <div id="loadingOverlay" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 z-50">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mb-4"></div>
+    <h2 class="text-xl font-semibold">Connecting to Host...</h2>
+    <p class="text-gray-400 mt-2 text-sm">Make sure the host is currently streaming.</p>
+  </div>
+
+  <!-- The actual stream -->
+  <video id="remoteVideo" autoplay playsinline></video>
+
+  <!-- Overlay -->
+  <div class="controls-overlay flex justify-between items-center z-10">
+    <div class="flex items-center gap-3">
+      <span class="flex h-3 w-3 relative">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+      </span>
+      <span class="font-medium drop-shadow-md text-sm">LIVE</span>
+    </div>
+    <div>
+      <button id="fullscreenBtn"
+        class="bg-white/20 hover:bg-white/30 backdrop-blur px-3 py-1.5 rounded text-sm transition-colors">
+        Full Screen
+      </button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/viewer.js"></script>
+</body>
+
+</html>

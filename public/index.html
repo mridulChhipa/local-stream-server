@@ -1,0 +1,96 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stream Host | Ultra-Low Latency</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    video {
+      background: #1a202c;
+      border-radius: 0.5rem;
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: contain;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans h-screen flex flex-col">
+  <!-- Navbar -->
+  <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-indigo-600">StreamCast Host</h1>
+    <div id="statusBadge" class="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full font-medium">Idle</div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- Controls Sidebar -->
+    <aside class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-6 h-fit">
+      <div>
+        <h2 class="text-lg font-semibold mb-2">1. Video Settings</h2>
+        <label class="block text-sm text-gray-600 mb-1">Target Resolution</label>
+        <select id="resolutionSelect"
+          class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 outline-none">
+          <option value="default">Original (Default)</option>
+          <option value="720">720p (1280x720)</option>
+          <option value="1080">1080p (1920x1080)</option>
+          <option value="1440">1440p (2560x1440)</option>
+          <option value="2160">4K (3840x2160)</option>
+        </select>
+        <p class="text-xs text-gray-500 mt-2">Resolution can be changed live during the stream.</p>
+      </div>
+
+      <hr class="border-gray-100">
+
+      <div>
+        <h2 class="text-lg font-semibold mb-2">2. Stream Controls</h2>
+        <button id="startBtn"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md mb-3">
+          Start Screen Share
+        </button>
+        <button id="stopBtn"
+          class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md hidden">
+          Stop Stream
+        </button>
+      </div>
+
+      <div id="inviteSection" class="hidden flex-col gap-2 mt-4 p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+        <h3 class="text-sm font-semibold text-indigo-800">Invite Viewers</h3>
+        <p class="text-xs text-indigo-600 mb-1">Share this link with devices on your Wi-Fi:</p>
+        <div class="flex gap-2">
+          <input type="text" id="viewerLink" readonly
+            class="flex-1 bg-white border border-indigo-200 text-xs rounded p-2 outline-none">
+          <button id="copyBtn"
+            class="bg-indigo-600 text-white px-3 py-1 rounded text-xs hover:bg-indigo-700">Copy</button>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">Active Viewers: <span id="viewerCount"
+            class="font-bold text-indigo-600">0</span></p>
+      </div>
+    </aside>
+
+    <!-- Video Preview -->
+    <section class="lg:col-span-2 flex flex-col h-full">
+      <h2 class="text-lg font-semibold mb-4">Local Preview</h2>
+      <div class="flex-1 bg-black rounded-xl shadow-lg flex items-center justify-center relative overflow-hidden">
+        <video id="localVideo" autoplay muted playsinline></video>
+        <div id="placeholder" class="absolute text-gray-500 flex flex-col items-center">
+          <svg class="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+            </path>
+          </svg>
+          <p>Screen sharing is currently off</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/host.js"></script>
+</body>
+
+</html>
